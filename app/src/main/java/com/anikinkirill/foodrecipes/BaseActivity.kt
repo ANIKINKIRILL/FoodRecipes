@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    private lateinit var progressBar: ProgressBar
+    lateinit var progressBar: ProgressBar
 
     override fun setContentView(layoutResID: Int) {
         val constraintLayout = layoutInflater.inflate(R.layout.activity_base, null)
