@@ -6,11 +6,11 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Recipe(
 
-    private val title: String? = null,
-    private val publisher: String? = null,
-    private val ingredients: List<String>? = null,
-    private val recipe_id: String? = null,
-    private val image_url: String? = null,
-    private val social_rank: Float? = null
+    val title: String? = null,
+    val publisher: String? = null,
+    val ingredients: List<String>? = null,
+    val recipe_id: String? = null,
+    val image_url: String? = null,
+    val social_rank: Float? = null
 
 ) : Parcelable
