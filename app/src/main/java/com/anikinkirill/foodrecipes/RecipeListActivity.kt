@@ -1,9 +1,8 @@
 package com.anikinkirill.foodrecipes
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
-class RecipeListActivity : AppCompatActivity() {
+class RecipeListActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
