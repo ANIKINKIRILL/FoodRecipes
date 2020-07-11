@@ -8,6 +8,6 @@ data class RecipeResponse(
 
     @SerializedName("recipe")
     @Expose
-    private val recipe: Recipe
+    val recipe: Recipe
 
 )

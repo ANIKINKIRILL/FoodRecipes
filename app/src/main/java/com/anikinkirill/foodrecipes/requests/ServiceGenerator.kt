@@ -12,8 +12,12 @@ object ServiceGenerator {
             .addConverterFactory(GsonConverterFactory.create())
     }
 
-    val retrofit: Retrofit by lazy {
+    private val retrofit: Retrofit by lazy {
         retrofitBuilder.build()
+    }
+
+    val recipeApi: RecipeApi by lazy {
+        retrofit.create(RecipeApi::class.java)
     }
 
 }
