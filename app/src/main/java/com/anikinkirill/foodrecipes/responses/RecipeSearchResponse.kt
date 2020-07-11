@@ -8,9 +8,9 @@ data class RecipeSearchResponse(
 
     @SerializedName("count")
     @Expose
-    private val count: Int,
+    val count: Int,
 
     @SerializedName("recipes")
     @Expose
-    private val recipes: List<Recipe>
+    val recipes: List<Recipe>
 )
