@@ -4,14 +4,13 @@ import com.anikinkirill.foodrecipes.models.Recipe
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class RecipeSearchResponse {
+data class RecipeSearchResponse(
 
     @SerializedName("count")
     @Expose
-    var count: Int? = null
+    private val count: Int,
 
     @SerializedName("recipes")
     @Expose
-    lateinit var recipes: List<Recipe>
-
-}
+    private val recipes: List<Recipe>
+)
