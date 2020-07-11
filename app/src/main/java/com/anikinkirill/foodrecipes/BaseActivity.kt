@@ -17,7 +17,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
         layoutInflater.inflate(layoutResID, frameLayout, true)
 
-        super.setContentView(layoutResID)
+        super.setContentView(constraintLayout)
     }
 
     fun showProgressBar(isVisible: Boolean){
