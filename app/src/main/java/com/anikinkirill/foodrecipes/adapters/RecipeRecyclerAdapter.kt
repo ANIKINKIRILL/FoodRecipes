@@ -100,7 +100,7 @@ class RecipeRecyclerAdapter(
 
     fun displaySearchCategories() {
         val categoriesList = arrayListOf<Recipe>()
-        for(i in 0..Constants.DEFAULT_SEARCH_CATEGORIES.size){
+        for(i in Constants.DEFAULT_SEARCH_CATEGORIES.indices){
             val recipe = Recipe().apply {
                 title = Constants.DEFAULT_SEARCH_CATEGORIES[i]
                 image_url = Constants.DEFAULT_SEARCH_CATEGORY_IMAGES[i]
