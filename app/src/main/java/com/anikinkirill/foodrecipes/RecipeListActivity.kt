@@ -49,6 +49,7 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 val userQuery: String = query ?: "chicken"
+                recipeAdapter.displayLoading()
                 viewModel.searchRecipesApi(userQuery, 1)
                 return true
             }

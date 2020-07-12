@@ -18,11 +18,20 @@ class RecipeRecyclerAdapter(
     private var recipes = arrayListOf<Recipe>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.recipe_list_item, parent, false)
-        return RecipeViewHolder(
-            view,
-            onRecipeListener
-        )
+        return when(viewType){
+            RECIPE_VIEW_HOLDER -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.recipe_list_item, parent, false)
+                RecipeViewHolder(view, onRecipeListener)
+            }
+            LOADING_VIEW_HOLDER -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_loading_list_item, parent, false)
+                LoadingViewHolder(view)
+            }
+            else -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.recipe_list_item, parent, false)
+                RecipeViewHolder(view, onRecipeListener)
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -31,23 +40,51 @@ class RecipeRecyclerAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val recipe = recipes[position]
-        val viewHolder = holder as RecipeViewHolder
-        viewHolder.title.text = recipe.title
-        viewHolder.publisher.text = recipe.publisher
-        viewHolder.social_score.text = recipe.social_rank?.roundToInt().toString()
+        if(getItemViewType(position) == RECIPE_VIEW_HOLDER) {
+            val viewHolder = holder as RecipeViewHolder
+            viewHolder.title.text = recipe.title
+            viewHolder.publisher.text = recipe.publisher
+            viewHolder.social_score.text = recipe.social_rank?.roundToInt().toString()
 
-        Glide
-            .with(viewHolder.itemView)
-            .load(recipe.image_url)
-            .centerCrop()
-            .placeholder(R.drawable.ic_launcher_background)
-            .into(viewHolder.image)
+            Glide
+                .with(viewHolder.itemView)
+                .load(recipe.image_url)
+                .centerCrop()
+                .placeholder(R.drawable.ic_launcher_background)
+                .into(viewHolder.image)
+        }
 
     }
 
     fun setRecipes(newRecipes: ArrayList<Recipe>){
         recipes = newRecipes
         notifyDataSetChanged()
+    }
+
+    fun displayLoading() {
+        if(!isLoading()){
+            val loadingRecipe = Recipe().apply { title = "LOADING..." }
+            val loadingRecipesList = arrayListOf(loadingRecipe)
+            recipes = loadingRecipesList
+            notifyDataSetChanged()
+        }
+    }
+
+    private fun isLoading() : Boolean {
+        if(recipes.size > 0) {
+            if (recipes[recipes.lastIndex].title == "LOADING...") {
+                return true
+            }
+        }
+        return false
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if(recipes[position].title == "LOADING..."){
+            LOADING_VIEW_HOLDER
+        }else{
+            RECIPE_VIEW_HOLDER
+        }
     }
 
 }
