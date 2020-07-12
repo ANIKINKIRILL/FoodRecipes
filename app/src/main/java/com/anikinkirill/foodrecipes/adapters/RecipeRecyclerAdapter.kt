@@ -10,9 +10,10 @@ import com.bumptech.glide.Glide
 import kotlin.math.roundToInt
 
 class RecipeRecyclerAdapter(
-    private var recipes: ArrayList<Recipe>,
     private val onRecipeListener: OnRecipeListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private var recipes = arrayListOf<Recipe>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recipe_list_item, parent, false)
