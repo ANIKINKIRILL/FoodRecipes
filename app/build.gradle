@@ -35,6 +35,8 @@ dependencies {
     def retrofit = "2.9.0"
     def lifecycle_version = "2.2.0"
     def card_view = "1.0.0"
+    def recycler_view = "1.1.0"
+    def glide = "4.11.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -59,4 +61,9 @@ dependencies {
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
     // CardView
     implementation "androidx.cardview:cardview:$card_view"
+    // Recycler View
+    implementation "androidx.recyclerview:recyclerview:$recycler_view"
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$glide"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glide"
 }
