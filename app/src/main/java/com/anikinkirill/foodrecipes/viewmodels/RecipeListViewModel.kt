@@ -1,16 +1,16 @@
 package com.anikinkirill.foodrecipes.viewmodels
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.anikinkirill.foodrecipes.models.Recipe
+import com.anikinkirill.foodrecipes.repositories.RecipeRepository
 
 class RecipeListViewModel : ViewModel() {
 
-    private val mutableLiveData = MutableLiveData<List<Recipe>>()
+    private val repository = RecipeRepository.instance
 
     fun getRecipesList() : LiveData<List<Recipe>> {
-        return mutableLiveData
+        return repository.getRecipesList()
     }
 
 }
