@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.anikinkirill.foodrecipes.adapters.OnRecipeListener
 import com.anikinkirill.foodrecipes.adapters.RecipeRecyclerAdapter
 import com.anikinkirill.foodrecipes.models.Recipe
+import com.anikinkirill.foodrecipes.util.RecipeRecyclerItemDecoration
 import com.anikinkirill.foodrecipes.viewmodels.RecipeListViewModel
 import kotlinx.android.synthetic.main.activity_recipe_list.*
 
@@ -46,6 +47,7 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@RecipeListActivity)
             adapter = recipeAdapter
+            addItemDecoration(RecipeRecyclerItemDecoration(30))
         }
     }
 
