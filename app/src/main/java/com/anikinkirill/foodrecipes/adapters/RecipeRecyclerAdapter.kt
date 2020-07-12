@@ -1,15 +1,18 @@
 package com.anikinkirill.foodrecipes.adapters
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.anikinkirill.foodrecipes.R
 import com.anikinkirill.foodrecipes.models.Recipe
+import com.anikinkirill.foodrecipes.util.Constants
 import com.bumptech.glide.Glide
 import kotlin.math.roundToInt
 
 private const val RECIPE_VIEW_HOLDER = 1
 private const val LOADING_VIEW_HOLDER = 2
+private const val CATEGORY_VIEW_HOLDER = 3
 
 class RecipeRecyclerAdapter(
     private val onRecipeListener: OnRecipeListener
@@ -26,6 +29,10 @@ class RecipeRecyclerAdapter(
             LOADING_VIEW_HOLDER -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_loading_list_item, parent, false)
                 LoadingViewHolder(view)
+            }
+            CATEGORY_VIEW_HOLDER -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.category_list_item, parent, false)
+                CategoryViewHolder(view, onRecipeListener)
             }
             else -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.recipe_list_item, parent, false)
@@ -52,6 +59,18 @@ class RecipeRecyclerAdapter(
                 .centerCrop()
                 .placeholder(R.drawable.ic_launcher_background)
                 .into(viewHolder.image)
+        }else if(getItemViewType(position) == CATEGORY_VIEW_HOLDER) {
+            val viewHolder = holder as CategoryViewHolder
+            viewHolder.categoryTitle.text = recipe.title
+
+            val imageUri = Uri.parse("android.resource://com.anikinkirill.foodrecipes/drawable/${recipe.image_url}")
+
+            Glide
+                .with(viewHolder.itemView)
+                .load(imageUri)
+                .centerCrop()
+                .placeholder(R.drawable.ic_launcher_background)
+                .into(viewHolder.categoryImage)
         }
 
     }
@@ -79,11 +98,25 @@ class RecipeRecyclerAdapter(
         return false
     }
 
+    fun displaySearchCategories() {
+        val categoriesList = arrayListOf<Recipe>()
+        for(i in Constants.DEFAULT_SEARCH_CATEGORIES.indices){
+            val recipe = Recipe().apply {
+                title = Constants.DEFAULT_SEARCH_CATEGORIES[i]
+                image_url = Constants.DEFAULT_SEARCH_CATEGORY_IMAGES[i]
+                social_rank = -1f
+            }
+            categoriesList.add(recipe)
+        }
+        recipes = categoriesList
+        notifyDataSetChanged()
+    }
+
     override fun getItemViewType(position: Int): Int {
-        return if(recipes[position].title == "LOADING..."){
-            LOADING_VIEW_HOLDER
-        }else{
-            RECIPE_VIEW_HOLDER
+        return when {
+            recipes[position].social_rank?.toInt() == -1 -> CATEGORY_VIEW_HOLDER
+            recipes[position].title == "LOADING..." -> LOADING_VIEW_HOLDER
+            else -> RECIPE_VIEW_HOLDER
         }
     }
 

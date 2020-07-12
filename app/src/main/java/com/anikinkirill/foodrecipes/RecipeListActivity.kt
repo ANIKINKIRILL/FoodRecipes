@@ -35,6 +35,11 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
             recipeAdapter.setRecipes(it as ArrayList)
         })
         initSearchView()
+
+        if(!viewModel.isViewingRecipes()){
+            displaySearchCategories()
+        }
+
     }
 
     private fun initRecyclerView() {
@@ -64,6 +69,12 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
     }
 
     override fun onCategoryClick(category: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        viewModel.searchRecipesApi(category, 1)
     }
+
+    private fun displaySearchCategories(){
+        viewModel.setIsViewingRecipes(false)
+        recipeAdapter.displaySearchCategories()
+    }
+
 }
