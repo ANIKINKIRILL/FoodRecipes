@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FoodRecipes</string>
+    <string name="search_view_hint">chicken</string>
 </resources>

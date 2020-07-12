@@ -37,6 +37,7 @@ dependencies {
     def card_view = "1.0.0"
     def recycler_view = "1.1.0"
     def glide = "4.11.0"
+    def material_deign = "1.0.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -66,4 +67,6 @@ dependencies {
     // Glide
     implementation "com.github.bumptech.glide:glide:$glide"
     annotationProcessor "com.github.bumptech.glide:compiler:$glide"
+    // Material Design
+    implementation "com.google.android.material:material:$material_deign"
 }

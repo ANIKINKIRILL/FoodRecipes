@@ -2,6 +2,7 @@ package com.anikinkirill.foodrecipes
 
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,9 +34,7 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
         viewModel.getRecipesList().observe(this, Observer<List<Recipe>> {
             recipeAdapter.setRecipes(it as ArrayList)
         })
-
-        viewModel.searchRecipesApi("chicken", 1)
-
+        initSearchView()
     }
 
     private fun initRecyclerView() {
@@ -43,6 +42,20 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
             layoutManager = LinearLayoutManager(this@RecipeListActivity)
             adapter = recipeAdapter
         }
+    }
+
+    private fun initSearchView() {
+        val searchView: SearchView = findViewById(R.id.search_view)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                val userQuery: String = query ?: "chicken"
+                viewModel.searchRecipesApi(userQuery, 1)
+                return true
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
     }
 
     override fun onRecipeClick(position: Int) {
