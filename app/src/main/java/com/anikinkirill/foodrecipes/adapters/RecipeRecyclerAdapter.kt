@@ -8,6 +8,9 @@ import com.anikinkirill.foodrecipes.models.Recipe
 import com.bumptech.glide.Glide
 import kotlin.math.roundToInt
 
+private const val RECIPE_VIEW_HOLDER = 1
+private const val LOADING_VIEW_HOLDER = 2
+
 class RecipeRecyclerAdapter(
     private val onRecipeListener: OnRecipeListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
