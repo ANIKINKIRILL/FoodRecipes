@@ -34,6 +34,7 @@ dependencies {
 
     def retrofit = "2.9.0"
     def lifecycle_version = "2.2.0"
+    def card_view = "1.0.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -56,4 +57,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     // Annotation processor
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    // CardView
+    implementation "androidx.cardview:cardview:$card_view"
 }
