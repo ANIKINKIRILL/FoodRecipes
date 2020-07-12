@@ -2,7 +2,7 @@ package com.anikinkirill.foodrecipes.requests
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.anikinkirill.foodrecipes.AppExecutors
+import com.anikinkirill.foodrecipes.util.AppExecutors
 import com.anikinkirill.foodrecipes.models.Recipe
 import com.anikinkirill.foodrecipes.util.Constants
 import java.util.concurrent.TimeUnit

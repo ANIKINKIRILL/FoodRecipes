@@ -1,10 +1,10 @@
-package com.anikinkirill.foodrecipes
+package com.anikinkirill.foodrecipes.adapters
 
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.anikinkirill.foodrecipes.adapters.OnRecipeListener
+import com.anikinkirill.foodrecipes.R
 
 class RecipeViewHolder(itemView: View, private val onRecipeListener: OnRecipeListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 

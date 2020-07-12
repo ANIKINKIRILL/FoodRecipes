@@ -1,4 +1,4 @@
-package com.anikinkirill.foodrecipes
+package com.anikinkirill.foodrecipes.util
 
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
