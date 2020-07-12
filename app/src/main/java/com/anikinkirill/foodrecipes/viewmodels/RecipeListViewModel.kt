@@ -13,4 +13,8 @@ class RecipeListViewModel : ViewModel() {
         return repository.getRecipesList()
     }
 
+    fun searchRecipesApi(query: String, page: Int) {
+        repository.searchRecipesApi(query, page)
+    }
+
 }

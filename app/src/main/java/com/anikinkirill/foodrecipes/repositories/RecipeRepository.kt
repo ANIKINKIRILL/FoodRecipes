@@ -18,4 +18,12 @@ class RecipeRepository private constructor() {
         return apiClient.getRecipesList()
     }
 
+    fun searchRecipesApi(query: String, page: Int) {
+        var pageNumber = page
+        if(pageNumber == 0){
+            pageNumber = 1
+        }
+        apiClient.searchRecipesApi(query, pageNumber)
+    }
+
 }
