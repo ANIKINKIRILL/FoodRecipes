@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.anikinkirill.foodrecipes.R
-import com.anikinkirill.foodrecipes.RecipeViewHolder
 import com.anikinkirill.foodrecipes.models.Recipe
 import com.bumptech.glide.Glide
 import kotlin.math.roundToInt
@@ -17,7 +16,10 @@ class RecipeRecyclerAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recipe_list_item, parent, false)
-        return RecipeViewHolder(view, onRecipeListener)
+        return RecipeViewHolder(
+            view,
+            onRecipeListener
+        )
     }
 
     override fun getItemCount(): Int {
