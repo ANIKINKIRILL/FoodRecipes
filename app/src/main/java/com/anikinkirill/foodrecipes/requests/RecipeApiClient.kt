@@ -11,6 +11,8 @@ class RecipeApiClient private constructor() {
 
     private val recipesList = MutableLiveData<List<Recipe>>()
 
+    private var retrieveRecipesRunnable: RetrieveRecipesRunnable? = null
+
     companion object {
         val instance: RecipeApiClient by lazy {
             RecipeApiClient()
@@ -21,11 +23,12 @@ class RecipeApiClient private constructor() {
         return recipesList
     }
 
-    fun searchRecipesApi() {
-        val handler = AppExecutors.instance.getNetworkIO().submit {
-            // 1. make a api request
-            // 2. recipesList.postValue(apiResult)
+    fun searchRecipesApi(query: String, page: Int) {
+        if(retrieveRecipesRunnable != null){
+            retrieveRecipesRunnable = null
         }
+        retrieveRecipesRunnable = RetrieveRecipesRunnable(recipesList, query, page)
+        val handler = AppExecutors.instance.getNetworkIO().submit(retrieveRecipesRunnable!!)
 
         AppExecutors.instance.getNetworkIO().schedule({
             // let the user know its timed out
