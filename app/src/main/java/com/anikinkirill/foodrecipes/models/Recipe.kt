@@ -10,7 +10,7 @@ data class Recipe(
     val publisher: String? = null,
     val ingredients: List<String>? = null,
     val recipe_id: String? = null,
-    val image_url: String? = null,
-    val social_rank: Float? = null
+    var image_url: String? = null,
+    var social_rank: Float? = null
 
 ) : Parcelable
