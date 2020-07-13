@@ -2,6 +2,8 @@ package com.anikinkirill.foodrecipes
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -27,6 +29,8 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe_list)
+
+        setSupportActionBar(findViewById(R.id.toolbar))
 
         recyclerView = findViewById(R.id.recycler_view)
         initRecyclerView()
@@ -79,6 +83,18 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
     private fun displaySearchCategories(){
         viewModel.setIsViewingRecipes(false)
         recipeAdapter.displaySearchCategories()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.action_categories -> displaySearchCategories()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {
