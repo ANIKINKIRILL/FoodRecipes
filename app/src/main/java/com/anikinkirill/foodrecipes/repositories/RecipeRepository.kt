@@ -46,4 +46,6 @@ class RecipeRepository private constructor() {
         return apiClient.getRecipe()
     }
 
+    fun getNetworkTimeout() : LiveData<Boolean> = apiClient.getNetworkTimeout()
+
 }

@@ -35,6 +35,13 @@ class RecipeActivity : BaseActivity() {
                 setDataToWidgets(it)
                 showProgressBar(false)
                 scrollView.visibility = View.VISIBLE
+                viewModel.setDidRetrieveRecipe(true)
+            }
+        })
+
+        viewModel.getNetworkTimeout().observe(this, Observer<Boolean> {
+            if(it && !viewModel.getDidRetrieveRecipe()){
+                Log.d(TAG, "subscribeObservers: timed out")
             }
         })
     }
