@@ -11,6 +11,7 @@ class RecipeApiClient private constructor() {
 
     private val recipesList = MutableLiveData<List<Recipe>>()
     private val recipe = MutableLiveData<Recipe>()
+    private val networkTimeoutLiveData = MutableLiveData<Boolean>()
 
     private var retrieveRecipesRunnable: RetrieveRecipesRunnable? = null
     private var retrieveRecipeRunnable: RetrieveRecipeRunnable? = null
@@ -50,7 +51,9 @@ class RecipeApiClient private constructor() {
         }
         retrieveRecipeRunnable = RetrieveRecipeRunnable(recipeId, recipe)
         val handler = AppExecutors.instance.getNetworkIO().submit(retrieveRecipeRunnable!!)
+        networkTimeoutLiveData.value = false
         AppExecutors.instance.getNetworkIO().schedule({
+            networkTimeoutLiveData.postValue(true)
             handler.cancel(true)
         }, Constants.NETWORK_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
     }
@@ -58,5 +61,7 @@ class RecipeApiClient private constructor() {
     fun getRecipe() : LiveData<Recipe> {
         return recipe
     }
+
+    fun getNetworkTimeout() : LiveData<Boolean> = networkTimeoutLiveData
 
 }

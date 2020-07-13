@@ -3,7 +3,6 @@ package com.anikinkirill.foodrecipes
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.anikinkirill.foodrecipes.models.Recipe
@@ -31,12 +30,30 @@ class RecipeActivity : BaseActivity() {
 
     private fun subscribeObservers() {
         viewModel.getRecipe().observe(this, Observer<Recipe> {
-            if(it.recipe_id == viewModel.mRecipeId) {
+            if(it.recipe_id == viewModel.getRecipeId()) {
                 setDataToWidgets(it)
-                showProgressBar(false)
                 scrollView.visibility = View.VISIBLE
+                showProgressBar(false)
+                viewModel.setDidRetrieveRecipe(true)
             }
         })
+
+        viewModel.getNetworkTimeout().observe(this, Observer<Boolean> {
+            if(it && !viewModel.getDidRetrieveRecipe()!!){
+                Log.d(TAG, "subscribeObservers: timed out")
+                displayTimedOutRecipe()
+                showProgressBar(false)
+            }
+        })
+    }
+
+    private fun displayTimedOutRecipe() {
+        Glide
+            .with(this)
+            .load(R.drawable.ic_launcher_background)
+            .centerCrop()
+            .into(recipe_image)
+        recipe_title.text = "Error with network connection"
     }
 
     private fun getIntentExtra() {
