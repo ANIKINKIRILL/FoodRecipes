@@ -116,6 +116,7 @@ class RecipeRecyclerAdapter(
         return when {
             recipes[position].social_rank?.toInt() == -1 -> CATEGORY_VIEW_HOLDER
             recipes[position].title == "LOADING..." -> LOADING_VIEW_HOLDER
+            position == recipes.size - 1 && position != 0 && recipes[position].title != "EXHAUSTED..." -> LOADING_VIEW_HOLDER
             else -> RECIPE_VIEW_HOLDER
         }
     }

@@ -27,6 +27,12 @@ class RecipeListViewModel : ViewModel() {
         repository.searchRecipesApi(query, page)
     }
 
+    fun searchNextPage() {
+        if(!isPerformingRequest && isViewingRecipes){
+            repository.searchNextPage()
+        }
+    }
+
     fun isViewingRecipes() : Boolean = isViewingRecipes
 
     fun setIsViewingRecipes(isViewingRecipes: Boolean){
