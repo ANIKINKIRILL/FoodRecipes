@@ -1,5 +1,6 @@
 package com.anikinkirill.foodrecipes
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -80,7 +81,11 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
     }
 
     override fun onRecipeClick(position: Int) {
-        Log.d(TAG, "onRecipeClick: clicked")
+        val recipe = recipeAdapter.getRecipes()[position]
+        val intent = Intent(this, RecipeActivity::class.java).apply {
+            this.putExtra("recipe", recipe)
+        }
+        startActivity(intent)
     }
 
     override fun onCategoryClick(category: String) {

@@ -121,4 +121,6 @@ class RecipeRecyclerAdapter(
         }
     }
 
+    fun getRecipes() = recipes
+
 }
