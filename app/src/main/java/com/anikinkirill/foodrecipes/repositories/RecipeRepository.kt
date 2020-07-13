@@ -7,6 +7,8 @@ import com.anikinkirill.foodrecipes.requests.RecipeApiClient
 class RecipeRepository private constructor() {
 
     private val apiClient = RecipeApiClient.instance
+    private var mQuery: String? = null
+    private var mPageNumber: Int? = null
 
     companion object {
         val instance: RecipeRepository by lazy {
@@ -23,7 +25,13 @@ class RecipeRepository private constructor() {
         if(pageNumber == 0){
             pageNumber = 1
         }
+        mQuery = query
+        mPageNumber = pageNumber
         apiClient.searchRecipesApi(query, pageNumber)
+    }
+
+    fun searchNextPage() {
+        searchRecipesApi(mQuery!!, mPageNumber!! + 1)
     }
 
     fun cancelRequest() {
