@@ -67,7 +67,7 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
     }
 
     override fun onRecipeClick(position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Log.d(TAG, "onRecipeClick: clicked")
     }
 
     override fun onCategoryClick(category: String) {
@@ -77,6 +77,14 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
     private fun displaySearchCategories(){
         viewModel.setIsViewingRecipes(false)
         recipeAdapter.displaySearchCategories()
+    }
+
+    override fun onBackPressed() {
+        if(viewModel.onBackPressed()){
+            super.onBackPressed()
+        }else{
+            displaySearchCategories()
+        }
     }
 
 }
