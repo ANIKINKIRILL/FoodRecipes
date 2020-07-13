@@ -18,7 +18,7 @@ interface RecipeApi {
     @GET("api/get")
     fun getRecipeById(
         @Query("key") api_key: String,
-        @Query("rId") recipe_id: Int
+        @Query("rId") recipe_id: String
     ) : Call<RecipeResponse>
 
 }

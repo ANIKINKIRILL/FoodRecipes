@@ -38,4 +38,12 @@ class RecipeRepository private constructor() {
         apiClient.cancelRequest()
     }
 
+    fun getRecipeById(recipeId: String) {
+        apiClient.getRecipeById(recipeId)
+    }
+
+    fun getRecipe() : LiveData<Recipe> {
+        return apiClient.getRecipe()
+    }
+
 }

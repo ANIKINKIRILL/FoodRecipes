@@ -10,8 +10,10 @@ import java.util.concurrent.TimeUnit
 class RecipeApiClient private constructor() {
 
     private val recipesList = MutableLiveData<List<Recipe>>()
+    private val recipe = MutableLiveData<Recipe>()
 
     private var retrieveRecipesRunnable: RetrieveRecipesRunnable? = null
+    private var retrieveRecipeRunnable: RetrieveRecipeRunnable? = null
 
     companion object {
         val instance: RecipeApiClient by lazy {
@@ -39,6 +41,22 @@ class RecipeApiClient private constructor() {
 
     fun cancelRequest() {
         retrieveRecipesRunnable?.cancelRequest()
+        retrieveRecipeRunnable?.cancelRequest()
+    }
+
+    fun getRecipeById(recipeId: String) {
+        if(retrieveRecipeRunnable != null){
+            retrieveRecipeRunnable = null
+        }
+        retrieveRecipeRunnable = RetrieveRecipeRunnable(recipeId, recipe)
+        val handler = AppExecutors.instance.getNetworkIO().submit(retrieveRecipeRunnable!!)
+        AppExecutors.instance.getNetworkIO().schedule({
+            handler.cancel(true)
+        }, Constants.NETWORK_TIMEOUT.toLong(), TimeUnit.MILLISECONDS)
+    }
+
+    fun getRecipe() : LiveData<Recipe> {
+        return recipe
     }
 
 }
