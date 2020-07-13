@@ -10,9 +10,11 @@ class RecipeListViewModel : ViewModel() {
     private val repository = RecipeRepository.instance
 
     private var isViewingRecipes = false
+    private var isPerformingRequest = false
 
     init {
         isViewingRecipes = false
+        isPerformingRequest = false
     }
 
     fun getRecipesList() : LiveData<List<Recipe>> {
@@ -21,6 +23,7 @@ class RecipeListViewModel : ViewModel() {
 
     fun searchRecipesApi(query: String, page: Int) {
         isViewingRecipes = true
+        isPerformingRequest = true
         repository.searchRecipesApi(query, page)
     }
 
@@ -30,7 +33,17 @@ class RecipeListViewModel : ViewModel() {
         this.isViewingRecipes = isViewingRecipes
     }
 
+    fun isPerformingRequest() : Boolean = isPerformingRequest
+
+    fun setIsPerformingRequest(isPerformingRequest: Boolean) {
+        this.isPerformingRequest = isPerformingRequest
+    }
+
     fun onBackPressed() : Boolean {
+        if(isPerformingRequest) {
+            repository.cancelRequest()
+            isPerformingRequest = false
+        }
         if(isViewingRecipes){
             isViewingRecipes = false
             return false

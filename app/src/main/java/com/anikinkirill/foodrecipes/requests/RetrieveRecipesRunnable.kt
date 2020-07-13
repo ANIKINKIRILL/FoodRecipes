@@ -44,7 +44,7 @@ class RetrieveRecipesRunnable(
         return ServiceGenerator.recipeApi.searchRecipe(Constants.API_KEY, query, page)
     }
 
-    private fun cancelRequest() {
+    fun cancelRequest() {
         Log.d(TAG, "cancelRequest: canceling the search request")
         cancelRequest = true
     }

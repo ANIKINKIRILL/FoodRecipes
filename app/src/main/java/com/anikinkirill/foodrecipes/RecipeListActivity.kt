@@ -33,6 +33,7 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
 
         viewModel = ViewModelProvider(this).get(RecipeListViewModel::class.java)
         viewModel.getRecipesList().observe(this, Observer<List<Recipe>> {
+            viewModel.setIsPerformingRequest(false)
             recipeAdapter.setRecipes(it as ArrayList)
         })
         initSearchView()
@@ -58,6 +59,7 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
                 val userQuery: String = query ?: "chicken"
                 recipeAdapter.displayLoading()
                 viewModel.searchRecipesApi(userQuery, 1)
+                searchView.clearFocus()
                 return true
             }
             override fun onQueryTextChange(newText: String?): Boolean {

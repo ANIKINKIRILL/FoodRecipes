@@ -26,4 +26,8 @@ class RecipeRepository private constructor() {
         apiClient.searchRecipesApi(query, pageNumber)
     }
 
+    fun cancelRequest() {
+        apiClient.cancelRequest()
+    }
+
 }

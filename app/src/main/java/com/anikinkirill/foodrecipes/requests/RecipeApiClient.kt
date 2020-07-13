@@ -37,4 +37,8 @@ class RecipeApiClient private constructor() {
 
     }
 
+    fun cancelRequest() {
+        retrieveRecipesRunnable?.cancelRequest()
+    }
+
 }
