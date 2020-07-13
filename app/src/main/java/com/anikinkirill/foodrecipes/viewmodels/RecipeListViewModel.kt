@@ -40,6 +40,10 @@ class RecipeListViewModel : ViewModel() {
     }
 
     fun onBackPressed() : Boolean {
+        if(isPerformingRequest) {
+            repository.cancelRequest()
+            isPerformingRequest = false
+        }
         if(isViewingRecipes){
             isViewingRecipes = false
             return false
