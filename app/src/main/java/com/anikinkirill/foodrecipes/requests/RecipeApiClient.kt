@@ -51,6 +51,7 @@ class RecipeApiClient private constructor() {
         }
         retrieveRecipeRunnable = RetrieveRecipeRunnable(recipeId, recipe)
         val handler = AppExecutors.instance.getNetworkIO().submit(retrieveRecipeRunnable!!)
+        networkTimeoutLiveData.value = false
         AppExecutors.instance.getNetworkIO().schedule({
             networkTimeoutLiveData.postValue(true)
             handler.cancel(true)

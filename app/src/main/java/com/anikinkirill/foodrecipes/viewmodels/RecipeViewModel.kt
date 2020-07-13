@@ -8,8 +8,8 @@ import com.anikinkirill.foodrecipes.repositories.RecipeRepository
 class RecipeViewModel : ViewModel() {
 
     private val repository = RecipeRepository.instance
-    var mRecipeId = ""
-    private var mDidRetrieveRecipe = false
+    private var mRecipeId: String? = null
+    private var mDidRetrieveRecipe: Boolean? = null
 
     init {
         mDidRetrieveRecipe = false
@@ -31,5 +31,7 @@ class RecipeViewModel : ViewModel() {
     }
 
     fun getDidRetrieveRecipe() = mDidRetrieveRecipe
+
+    fun getRecipeId() = mRecipeId
 
 }
