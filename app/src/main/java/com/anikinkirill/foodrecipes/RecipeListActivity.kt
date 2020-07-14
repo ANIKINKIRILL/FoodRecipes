@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.anikinkirill.foodrecipes.adapters.OnRecipeListener
@@ -41,6 +42,11 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
             viewModel.setIsPerformingRequest(false)
             recipeAdapter.setRecipes(it as ArrayList)
         })
+        
+        viewModel.isQueryExhausted().observe(this, Observer { 
+            Log.d(TAG, "onCreate: the query is exhausted: $it")
+        })
+        
         initSearchView()
 
         if(!viewModel.isViewingRecipes()){
