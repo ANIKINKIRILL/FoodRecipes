@@ -43,8 +43,11 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
             recipeAdapter.setRecipes(it as ArrayList)
         })
         
-        viewModel.isQueryExhausted().observe(this, Observer { 
-            Log.d(TAG, "onCreate: the query is exhausted: $it")
+        viewModel.isQueryExhausted().observe(this, Observer {
+            if(it) {
+                Log.d(TAG, "onCreate: should be exhausted")
+                recipeAdapter.displayExhaustedSearch()
+            }
         })
         
         initSearchView()

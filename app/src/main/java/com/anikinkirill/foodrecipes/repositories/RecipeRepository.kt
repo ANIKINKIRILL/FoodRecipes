@@ -40,8 +40,11 @@ class RecipeRepository private constructor() {
 
     private fun doneQuery(list: List<Recipe>?){
         if(list != null) {
-            if (list.size < 30) {
+            if (list.size % 30 != 0) {
                 isQueryExhausted.value = true
+            }
+            if(list.isEmpty()){
+               isQueryExhausted.value = true
             }
         }else{
             isQueryExhausted.value = true

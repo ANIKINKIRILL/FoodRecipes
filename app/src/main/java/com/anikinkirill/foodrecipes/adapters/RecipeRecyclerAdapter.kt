@@ -1,6 +1,7 @@
 package com.anikinkirill.foodrecipes.adapters
 
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -13,10 +14,15 @@ import kotlin.math.roundToInt
 private const val RECIPE_VIEW_HOLDER = 1
 private const val LOADING_VIEW_HOLDER = 2
 private const val CATEGORY_VIEW_HOLDER = 3
+private const val EXHAUSTED_VIEW_HOLDER = 4
 
 class RecipeRecyclerAdapter(
     private val onRecipeListener: OnRecipeListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    companion object {
+        private const val TAG = "RecipeRecyclerAdapter"
+    }
 
     private var recipes = arrayListOf<Recipe>()
 
@@ -33,6 +39,10 @@ class RecipeRecyclerAdapter(
             CATEGORY_VIEW_HOLDER -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.category_list_item, parent, false)
                 CategoryViewHolder(view, onRecipeListener)
+            }
+            EXHAUSTED_VIEW_HOLDER -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_search_exhausted, parent, false)
+                ExhaustedViewHolder(view)
             }
             else -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.recipe_list_item, parent, false)
@@ -81,6 +91,7 @@ class RecipeRecyclerAdapter(
     }
 
     fun displayLoading() {
+        Log.d(TAG, "displayLoading: called")
         if(!isLoading()){
             val loadingRecipe = Recipe().apply { title = "LOADING..." }
             val loadingRecipesList = arrayListOf(loadingRecipe)
@@ -92,9 +103,11 @@ class RecipeRecyclerAdapter(
     private fun isLoading() : Boolean {
         if(recipes.size > 0) {
             if (recipes[recipes.lastIndex].title == "LOADING...") {
+                Log.d(TAG, "isLoading: true")
                 return true
             }
         }
+        Log.d(TAG, "isLoading: false")
         return false
     }
 
@@ -112,12 +125,43 @@ class RecipeRecyclerAdapter(
         notifyDataSetChanged()
     }
 
+    fun displayExhaustedSearch() {
+        // hide loading process
+        if(isLoading()){
+            for(recipe in recipes){
+                if(recipe.title == "LOADING..."){
+                    recipes.remove(recipe)
+                }
+            }
+        }
+        notifyDataSetChanged()
+        val exhaustedRecipe = Recipe().apply { title = "EXHAUSTED..." }
+        recipes.add(exhaustedRecipe)
+        notifyDataSetChanged()
+    }
+
     override fun getItemViewType(position: Int): Int {
         return when {
-            recipes[position].social_rank?.toInt() == -1 -> CATEGORY_VIEW_HOLDER
-            recipes[position].title == "LOADING..." -> LOADING_VIEW_HOLDER
-            position == recipes.size - 1 && position != 0 && recipes[position].title != "EXHAUSTED..." -> LOADING_VIEW_HOLDER
-            else -> RECIPE_VIEW_HOLDER
+            recipes[position].social_rank?.toInt() == -1 -> {
+                Log.d(TAG, "getItemViewType: CATEGORY")
+                CATEGORY_VIEW_HOLDER
+            }
+            recipes[position].title == "LOADING..." -> {
+                Log.d(TAG, "getItemViewType: LOADING")
+                LOADING_VIEW_HOLDER
+            }
+            recipes[position].title == "EXHAUSTED..." -> {
+                Log.d(TAG, "getItemViewType: EXHAUSTED")
+                EXHAUSTED_VIEW_HOLDER
+            }
+            position == recipes.size - 1 && position != 0 && recipes[position].title != "EXHAUSTED..." -> {
+                Log.d(TAG, "getItemViewType: LOADING")
+                LOADING_VIEW_HOLDER
+            }
+            else -> {
+                Log.d(TAG, "getItemViewType: RECIPE")
+                RECIPE_VIEW_HOLDER
+            }
         }
     }
 
