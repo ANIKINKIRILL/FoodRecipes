@@ -28,7 +28,7 @@ class RecipeListViewModel : ViewModel() {
     }
 
     fun searchNextPage() {
-        if(!isPerformingRequest && isViewingRecipes){
+        if(!isPerformingRequest && isViewingRecipes && !repository.isQueryExhausted().value!!){
             repository.searchNextPage()
         }
     }
@@ -44,6 +44,8 @@ class RecipeListViewModel : ViewModel() {
     fun setIsPerformingRequest(isPerformingRequest: Boolean) {
         this.isPerformingRequest = isPerformingRequest
     }
+
+    fun isQueryExhausted() = repository.isQueryExhausted()
 
     fun onBackPressed() : Boolean {
         if(isPerformingRequest) {
