@@ -2,21 +2,17 @@ package com.anikinkirill.foodrecipes
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.anikinkirill.foodrecipes.adapters.OnRecipeListener
 import com.anikinkirill.foodrecipes.adapters.RecipeRecyclerAdapter
-import com.anikinkirill.foodrecipes.models.Recipe
 import com.anikinkirill.foodrecipes.util.RecipeRecyclerItemDecoration
 import com.anikinkirill.foodrecipes.viewmodels.RecipeListViewModel
-import kotlinx.android.synthetic.main.activity_recipe_list.*
 
 class RecipeListActivity : BaseActivity(), OnRecipeListener {
 
@@ -34,31 +30,30 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
 
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        recyclerView = findViewById(R.id.recycler_view)
         initRecyclerView()
 
         viewModel = ViewModelProvider(this).get(RecipeListViewModel::class.java)
-        viewModel.getRecipesList().observe(this, Observer<List<Recipe>> {
-            viewModel.setIsPerformingRequest(false)
-            recipeAdapter.setRecipes(it as ArrayList)
-        })
-        
-        viewModel.isQueryExhausted().observe(this, Observer {
-            if(it) {
-                Log.d(TAG, "onCreate: should be exhausted")
-                recipeAdapter.displayExhaustedSearch()
-            }
-        })
         
         initSearchView()
 
-        if(!viewModel.isViewingRecipes()){
-            displaySearchCategories()
-        }
+        subscribeObservers()
+    }
 
+    private fun subscribeObservers() {
+        viewModel.viewState().observe(this, Observer {
+            when(it){
+                is ViewState.RECIPES -> {
+                    // display recipes will trigger automatically from another observer
+                }
+                is ViewState.CATEGORIES -> {
+                    displaySearchCategories()
+                }
+            }
+        })
     }
 
     private fun initRecyclerView() {
+        recyclerView = findViewById(R.id.recycler_view)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@RecipeListActivity)
             adapter = recipeAdapter
@@ -67,7 +62,7 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if(!recyclerView.canScrollVertically(1)){
-                    viewModel.searchNextPage()
+
                 }
             }
         })
@@ -77,10 +72,7 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
         val searchView: SearchView = findViewById(R.id.search_view)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                val userQuery: String = query ?: "chicken"
-                recipeAdapter.displayLoading()
-                viewModel.searchRecipesApi(userQuery, 1)
-                searchView.clearFocus()
+
                 return true
             }
             override fun onQueryTextChange(newText: String?): Boolean {
@@ -98,11 +90,10 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
     }
 
     override fun onCategoryClick(category: String) {
-        viewModel.searchRecipesApi(category, 1)
+
     }
 
     private fun displaySearchCategories(){
-        viewModel.setIsViewingRecipes(false)
         recipeAdapter.displaySearchCategories()
     }
 
@@ -116,14 +107,6 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
             R.id.action_categories -> displaySearchCategories()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onBackPressed() {
-        if(viewModel.onBackPressed()){
-            super.onBackPressed()
-        }else{
-            displaySearchCategories()
-        }
     }
 
 }
