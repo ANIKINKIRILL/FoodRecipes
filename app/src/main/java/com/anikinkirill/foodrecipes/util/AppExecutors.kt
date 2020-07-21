@@ -13,7 +13,7 @@ class AppExecutors private constructor() {
         }
     }
 
-    private val mDiskIO = Executors.newSingleThreadExecutor() // for cache
+    private val mDiskIO = Executors.newSingleThreadExecutor() // for api requests
 
     private val mMainThreadExecutor = MainThreadExecutor()
 

@@ -30,7 +30,7 @@ sealed class ApiResponse<T> {
     }
 
     data class ApiSuccessResponse<T>(
-        private var body: T
+        var body: T
     ) : ApiResponse<T>()
 
     data class ApiErrorResponse<T>(
