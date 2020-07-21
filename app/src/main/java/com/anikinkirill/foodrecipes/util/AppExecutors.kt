@@ -1,7 +1,9 @@
 package com.anikinkirill.foodrecipes.util
 
+import android.os.Handler
+import android.os.Looper
+import java.util.concurrent.Executor
 import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledExecutorService
 
 class AppExecutors private constructor() {
 
@@ -11,10 +13,18 @@ class AppExecutors private constructor() {
         }
     }
 
-    private val networkIO = Executors.newScheduledThreadPool(3)
+    private val mDiskIO = Executors.newSingleThreadExecutor() // for cache
 
-    fun getNetworkIO() : ScheduledExecutorService {
-        return networkIO
+    private val mMainThreadExecutor = MainThreadExecutor()
+
+    inner class MainThreadExecutor : Executor {
+        private val mainThreadHandler = Handler(Looper.getMainLooper())
+        override fun execute(command: Runnable) {
+            mainThreadHandler.post(command)
+        }
     }
+
+    fun getDiskIO() = mDiskIO
+    fun getMainThreadExecutor() = mMainThreadExecutor
 
 }
