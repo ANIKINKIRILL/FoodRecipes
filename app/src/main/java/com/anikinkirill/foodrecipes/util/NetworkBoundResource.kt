@@ -6,9 +6,32 @@ import com.anikinkirill.foodrecipes.responses.ApiResponse
 
 // CacheObject: Type for the Resource data. (cache database)
 // RequestObject: Type for the API response. (api request result)
-abstract class NetworkBoundResource<CacheObject, RequestObject> {
+abstract class NetworkBoundResource<CacheObject, RequestObject>(private val appExecutors: AppExecutors) {
 
     private var results = MediatorLiveData<Resource<CacheObject>>()
+
+    init {
+        // 1. update LiveData for loading status
+        results.value = Resource.Loading()
+        // 2. observe LiveData from the local database
+        val localDatabaseSource: LiveData<CacheObject> = loadFromDb()
+        results.addSource(localDatabaseSource) { it1 ->
+            results.removeSource(localDatabaseSource)
+            if(shouldFetch(it1)){
+                // get data from the network
+            }else {
+                results.addSource(localDatabaseSource) { it2 ->
+                    setValue(Resource.Success(it2))
+                }
+            }
+        }
+    }
+
+    private fun setValue(newValue: Resource<CacheObject>){
+        if(results.value != newValue) {
+            results.value = newValue
+        }
+    }
 
     // Called to save the result of the API response into the database
     protected abstract fun saveCallResult(item: RequestObject)
