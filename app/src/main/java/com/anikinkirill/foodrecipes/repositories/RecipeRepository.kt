@@ -5,9 +5,11 @@ import androidx.lifecycle.LiveData
 import com.anikinkirill.foodrecipes.models.Recipe
 import com.anikinkirill.foodrecipes.persistence.RecipeDao
 import com.anikinkirill.foodrecipes.persistence.RecipeDatabase
+import com.anikinkirill.foodrecipes.requests.ServiceGenerator
 import com.anikinkirill.foodrecipes.responses.ApiResponse
 import com.anikinkirill.foodrecipes.responses.RecipeSearchResponse
 import com.anikinkirill.foodrecipes.util.AppExecutors
+import com.anikinkirill.foodrecipes.util.Constants
 import com.anikinkirill.foodrecipes.util.NetworkBoundResource
 import com.anikinkirill.foodrecipes.util.Resource
 
@@ -40,7 +42,7 @@ class RecipeRepository private constructor(private val context: Context) {
             }
 
             override fun createCall(): LiveData<ApiResponse<RecipeSearchResponse>> {
-                TODO("Not yet implemented")
+                return ServiceGenerator.recipeApi.searchRecipe(Constants.API_KEY, query, page)
             }
         }.asLiveData()
     }

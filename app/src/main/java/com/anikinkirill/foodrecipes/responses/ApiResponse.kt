@@ -3,7 +3,7 @@ package com.anikinkirill.foodrecipes.responses
 import retrofit2.Response
 import java.io.IOException
 
-sealed class ApiResponse<T> {
+open class ApiResponse<T> {
 
     fun create(error: Throwable) : ApiResponse<T> {
         return ApiErrorResponse((if (error.message != "") error.message else "Unknown error\\nCheck network connection").toString())
