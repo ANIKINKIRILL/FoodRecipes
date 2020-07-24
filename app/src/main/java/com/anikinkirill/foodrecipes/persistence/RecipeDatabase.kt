@@ -11,6 +11,8 @@ import com.anikinkirill.foodrecipes.models.Recipe
 @TypeConverters(Converters::class)
 abstract class RecipeDatabase : RoomDatabase() {
 
+    abstract fun recipeDao() : RecipeDao
+
     companion object {
         @Volatile
         private var INSTANCE: RecipeDatabase? = null
