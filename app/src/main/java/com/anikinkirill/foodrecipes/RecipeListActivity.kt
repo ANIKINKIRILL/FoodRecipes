@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.anikinkirill.foodrecipes.adapters.OnRecipeListener
 import com.anikinkirill.foodrecipes.adapters.RecipeRecyclerAdapter
+import com.anikinkirill.foodrecipes.models.Recipe
 import com.anikinkirill.foodrecipes.util.RecipeRecyclerItemDecoration
 import com.anikinkirill.foodrecipes.util.Testing
 import com.anikinkirill.foodrecipes.viewmodels.RecipeListViewModel
@@ -48,7 +49,7 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
             it?.let {
                 Log.d(TAG, "subscribeObservers: STATUS : ${it.status}")
                 it.data?.let { data ->
-                    Testing.printRecipes(data, TAG)
+                    recipeAdapter.setRecipes(data as ArrayList<Recipe>)
                 }
             }
         })
