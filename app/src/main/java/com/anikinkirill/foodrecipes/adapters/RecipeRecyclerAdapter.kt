@@ -1,6 +1,5 @@
 package com.anikinkirill.foodrecipes.adapters
 
-import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,8 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.anikinkirill.foodrecipes.R
 import com.anikinkirill.foodrecipes.models.Recipe
 import com.anikinkirill.foodrecipes.util.Constants
-import com.bumptech.glide.Glide
-import kotlin.math.roundToInt
+import com.bumptech.glide.RequestManager
 
 private const val RECIPE_VIEW_HOLDER = 1
 private const val LOADING_VIEW_HOLDER = 2
@@ -17,7 +15,8 @@ private const val CATEGORY_VIEW_HOLDER = 3
 private const val EXHAUSTED_VIEW_HOLDER = 4
 
 class RecipeRecyclerAdapter(
-    private val onRecipeListener: OnRecipeListener
+    private val onRecipeListener: OnRecipeListener,
+    private val requestManager: RequestManager
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -30,7 +29,7 @@ class RecipeRecyclerAdapter(
         return when(viewType){
             RECIPE_VIEW_HOLDER -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.recipe_list_item, parent, false)
-                RecipeViewHolder(view, onRecipeListener)
+                RecipeViewHolder(view, onRecipeListener, requestManager)
             }
             LOADING_VIEW_HOLDER -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_loading_list_item, parent, false)
@@ -38,7 +37,7 @@ class RecipeRecyclerAdapter(
             }
             CATEGORY_VIEW_HOLDER -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.category_list_item, parent, false)
-                CategoryViewHolder(view, onRecipeListener)
+                CategoryViewHolder(view, onRecipeListener, requestManager)
             }
             EXHAUSTED_VIEW_HOLDER -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_search_exhausted, parent, false)
@@ -46,7 +45,7 @@ class RecipeRecyclerAdapter(
             }
             else -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.recipe_list_item, parent, false)
-                RecipeViewHolder(view, onRecipeListener)
+                RecipeViewHolder(view, onRecipeListener, requestManager)
             }
         }
     }
@@ -59,28 +58,10 @@ class RecipeRecyclerAdapter(
         val recipe = recipes[position]
         if(getItemViewType(position) == RECIPE_VIEW_HOLDER) {
             val viewHolder = holder as RecipeViewHolder
-            viewHolder.title.text = recipe.title
-            viewHolder.publisher.text = recipe.publisher
-            viewHolder.social_score.text = recipe.social_rank?.roundToInt().toString()
-
-            Glide
-                .with(viewHolder.itemView)
-                .load(recipe.image_url)
-                .centerCrop()
-                .placeholder(R.drawable.ic_launcher_background)
-                .into(viewHolder.image)
+            viewHolder.onBind(recipe)
         }else if(getItemViewType(position) == CATEGORY_VIEW_HOLDER) {
             val viewHolder = holder as CategoryViewHolder
-            viewHolder.categoryTitle.text = recipe.title
-
-            val imageUri = Uri.parse("android.resource://com.anikinkirill.foodrecipes/drawable/${recipe.image_url}")
-
-            Glide
-                .with(viewHolder.itemView)
-                .load(imageUri)
-                .centerCrop()
-                .placeholder(R.drawable.ic_launcher_background)
-                .into(viewHolder.categoryImage)
+            viewHolder.onBind(recipe)
         }
 
     }
