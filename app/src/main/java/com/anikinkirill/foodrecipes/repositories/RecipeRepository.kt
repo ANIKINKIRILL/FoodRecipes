@@ -14,7 +14,7 @@ import com.anikinkirill.foodrecipes.util.Constants
 import com.anikinkirill.foodrecipes.util.NetworkBoundResource
 import com.anikinkirill.foodrecipes.util.Resource
 
-class RecipeRepository private constructor(private val context: Context) {
+class RecipeRepository constructor(private val context: Context) {
 
     private val recipeDao: RecipeDao = RecipeDatabase.getDatabase(context).recipeDao()
 
@@ -44,7 +44,7 @@ class RecipeRepository private constructor(private val context: Context) {
                         // in this case we should not save ingredients or timestamp
                         Log.d(TAG, "saveCallResult: CONFLICT. The recipe already in the cache  ")
                         recipeDao.updateRecipe(
-                            recipes[index].recipe_id!!,
+                            recipes[index].recipe_id,
                             recipes[index].title!!,
                             recipes[index].publisher!!,
                             recipes[index].image_url!!,
@@ -55,7 +55,7 @@ class RecipeRepository private constructor(private val context: Context) {
             }
 
             override fun shouldFetch(data: List<Recipe>?): Boolean {
-                TODO("Not yet implemented")
+                return true
             }
 
             override fun loadFromDb(): LiveData<List<Recipe>> {

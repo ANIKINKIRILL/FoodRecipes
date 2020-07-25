@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.anikinkirill.foodrecipes.models.Recipe
 import com.anikinkirill.foodrecipes.viewmodels.RecipeViewModel
 import com.bumptech.glide.Glide
@@ -23,7 +24,7 @@ class RecipeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe)
         showProgressBar(true)
-        viewModel = ViewModelProvider(this).get(RecipeViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(RecipeViewModel::class.java)
         subscribeObservers()
         getIntentExtra()
     }
