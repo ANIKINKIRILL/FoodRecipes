@@ -20,6 +20,9 @@ import com.anikinkirill.foodrecipes.util.Resource
 import com.anikinkirill.foodrecipes.util.Testing
 import com.anikinkirill.foodrecipes.viewmodels.RecipeListViewModel
 import com.anikinkirill.foodrecipes.viewmodels.RecipeListViewModel.Companion.QUERY_EXHAUSTED
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
+import com.bumptech.glide.request.RequestOptions
 
 class RecipeListActivity : BaseActivity(), OnRecipeListener {
 
@@ -29,11 +32,13 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
 
     private lateinit var viewModel: RecipeListViewModel
     private lateinit var recyclerView: RecyclerView
-    private val recipeAdapter = RecipeRecyclerAdapter(this)
+    private lateinit var recipeAdapter: RecipeRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe_list)
+
+        recipeAdapter = RecipeRecyclerAdapter(this, initGlide())
 
         setSupportActionBar(findViewById(R.id.toolbar))
 
@@ -121,6 +126,11 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
                 return false
             }
         })
+    }
+
+    private fun initGlide() : RequestManager {
+        val requestOptions = RequestOptions().placeholder(R.drawable.white_background).error(R.drawable.white_background)
+        return Glide.with(this).applyDefaultRequestOptions(requestOptions)
     }
 
     private fun searchRecipes(query: String) {
