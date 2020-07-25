@@ -29,22 +29,7 @@ class RecipeActivity : BaseActivity() {
     }
 
     private fun subscribeObservers() {
-        viewModel.getRecipe().observe(this, Observer<Recipe> {
-            if(it.recipe_id == viewModel.getRecipeId()) {
-                setDataToWidgets(it)
-                scrollView.visibility = View.VISIBLE
-                showProgressBar(false)
-                viewModel.setDidRetrieveRecipe(true)
-            }
-        })
 
-        viewModel.getNetworkTimeout().observe(this, Observer<Boolean> {
-            if(it && !viewModel.getDidRetrieveRecipe()!!){
-                Log.d(TAG, "subscribeObservers: timed out")
-                displayTimedOutRecipe()
-                showProgressBar(false)
-            }
-        })
     }
 
     private fun displayTimedOutRecipe() {
@@ -57,10 +42,7 @@ class RecipeActivity : BaseActivity() {
     }
 
     private fun getIntentExtra() {
-        if(intent.hasExtra("recipe")){
-            val recipe = intent.getParcelableExtra("recipe") as Recipe
-            viewModel.getRecipeById(recipe.recipe_id!!)
-        }
+
     }
 
     private fun setDataToWidgets(recipe: Recipe) {
