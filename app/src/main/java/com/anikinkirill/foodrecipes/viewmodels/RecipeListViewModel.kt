@@ -12,7 +12,7 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
 
     companion object {
         private const val TAG = "RecipeListViewModel"
-        private const val QUERY_EXHAUSTED = "No more results"
+        const val QUERY_EXHAUSTED = "No more results"
     }
 
     private val mViewState = MutableLiveData<ViewState>()
