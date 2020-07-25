@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,8 +16,10 @@ import com.anikinkirill.foodrecipes.adapters.OnRecipeListener
 import com.anikinkirill.foodrecipes.adapters.RecipeRecyclerAdapter
 import com.anikinkirill.foodrecipes.models.Recipe
 import com.anikinkirill.foodrecipes.util.RecipeRecyclerItemDecoration
+import com.anikinkirill.foodrecipes.util.Resource
 import com.anikinkirill.foodrecipes.util.Testing
 import com.anikinkirill.foodrecipes.viewmodels.RecipeListViewModel
+import com.anikinkirill.foodrecipes.viewmodels.RecipeListViewModel.Companion.QUERY_EXHAUSTED
 
 class RecipeListActivity : BaseActivity(), OnRecipeListener {
 
@@ -47,9 +50,31 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
 
         viewModel.getRecipes().observe(this, Observer {
             it?.let {
-                Log.d(TAG, "subscribeObservers: STATUS : ${it.status}")
-                it.data?.let { data ->
-                    recipeAdapter.setRecipes(data as ArrayList<Recipe>)
+                when(it.status) {
+                    is Resource.Status.SUCCESS -> {
+                        Log.d(TAG, "subscribeObservers: cache has been refreshed")
+                        Log.d(TAG, "subscribeObservers: status: SUCCESS, recipes: ${it.data?.size}")
+                        recipeAdapter.hideLoading()
+                        recipeAdapter.setRecipes(it.data as ArrayList<Recipe>)
+                    }
+                    is Resource.Status.LOADING -> {
+                        if(viewModel.getPageNumber()!! > 1) {
+                            recipeAdapter.displayLoading()
+                        }else{
+                            recipeAdapter.displayOnlyLoading()
+                        }
+                    }
+                    is Resource.Status.ERROR -> {
+                        Log.d(TAG, "subscribeObservers: can not refresh the cache")
+                        Log.d(TAG, "subscribeObservers: ERROR message: ${it.message}")
+                        Log.d(TAG, "subscribeObservers: status: ERROR, recipes: ${it.data?.size}")
+                        recipeAdapter.hideLoading()
+                        recipeAdapter.setRecipes(it.data as ArrayList<Recipe>)
+                        Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                        if(it.message == QUERY_EXHAUSTED){
+                            recipeAdapter.displayExhaustedSearch()
+                        }
+                    }
                 }
             }
         })

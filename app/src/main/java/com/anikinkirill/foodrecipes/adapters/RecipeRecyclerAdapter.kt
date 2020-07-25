@@ -90,12 +90,25 @@ class RecipeRecyclerAdapter(
         notifyDataSetChanged()
     }
 
+    // for searching recipes
+    fun displayOnlyLoading() {
+        Log.d(TAG, "displayOnlyLoading: called")
+        clearRecipesList()
+        val recipe = Recipe().apply { title = "LOADING..." }
+        recipes.add(recipe)
+        notifyDataSetChanged()
+    }
+
+    private fun clearRecipesList() {
+        recipes.clear()
+        notifyDataSetChanged()
+    }
+
+    // for pagination
     fun displayLoading() {
-        Log.d(TAG, "displayLoading: called")
-        if(!isLoading()){
-            val loadingRecipe = Recipe().apply { title = "LOADING..." }
-            val loadingRecipesList = arrayListOf(loadingRecipe)
-            recipes = loadingRecipesList
+        if(!isLoading()) {
+            val recipe = Recipe().apply { title = "LOADING..." }
+            recipes.add(recipe)
             notifyDataSetChanged()
         }
     }
@@ -109,6 +122,17 @@ class RecipeRecyclerAdapter(
         }
         Log.d(TAG, "isLoading: false")
         return false
+    }
+
+    fun hideLoading() {
+        if(isLoading()) {
+            if(recipes.first().title == "LOADING..."){
+                recipes.removeAt(0)
+            } else if(recipes.last().title == "LOADING..."){
+                recipes.removeAt(recipes.size - 1)
+            }
+            notifyDataSetChanged()
+        }
     }
 
     fun displaySearchCategories() {
@@ -127,14 +151,7 @@ class RecipeRecyclerAdapter(
 
     fun displayExhaustedSearch() {
         // hide loading process
-        if(isLoading()){
-            for(recipe in recipes){
-                if(recipe.title == "LOADING..."){
-                    recipes.remove(recipe)
-                }
-            }
-        }
-        notifyDataSetChanged()
+        hideLoading()
         val exhaustedRecipe = Recipe().apply { title = "EXHAUSTED..." }
         recipes.add(exhaustedRecipe)
         notifyDataSetChanged()
@@ -153,10 +170,6 @@ class RecipeRecyclerAdapter(
             recipes[position].title == "EXHAUSTED..." -> {
                 Log.d(TAG, "getItemViewType: EXHAUSTED")
                 EXHAUSTED_VIEW_HOLDER
-            }
-            position == recipes.size - 1 && position != 0 && recipes[position].title != "EXHAUSTED..." -> {
-                Log.d(TAG, "getItemViewType: LOADING")
-                LOADING_VIEW_HOLDER
             }
             else -> {
                 Log.d(TAG, "getItemViewType: RECIPE")
