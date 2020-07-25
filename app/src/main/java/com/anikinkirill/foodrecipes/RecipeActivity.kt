@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.anikinkirill.foodrecipes.models.Recipe
 import com.anikinkirill.foodrecipes.viewmodels.RecipeViewModel
 import com.bumptech.glide.Glide
@@ -23,28 +24,13 @@ class RecipeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe)
         showProgressBar(true)
-        viewModel = ViewModelProvider(this).get(RecipeViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(RecipeViewModel::class.java)
         subscribeObservers()
         getIntentExtra()
     }
 
     private fun subscribeObservers() {
-        viewModel.getRecipe().observe(this, Observer<Recipe> {
-            if(it.recipe_id == viewModel.getRecipeId()) {
-                setDataToWidgets(it)
-                scrollView.visibility = View.VISIBLE
-                showProgressBar(false)
-                viewModel.setDidRetrieveRecipe(true)
-            }
-        })
 
-        viewModel.getNetworkTimeout().observe(this, Observer<Boolean> {
-            if(it && !viewModel.getDidRetrieveRecipe()!!){
-                Log.d(TAG, "subscribeObservers: timed out")
-                displayTimedOutRecipe()
-                showProgressBar(false)
-            }
-        })
     }
 
     private fun displayTimedOutRecipe() {
@@ -57,10 +43,7 @@ class RecipeActivity : BaseActivity() {
     }
 
     private fun getIntentExtra() {
-        if(intent.hasExtra("recipe")){
-            val recipe = intent.getParcelableExtra("recipe") as Recipe
-            viewModel.getRecipeById(recipe.recipe_id!!)
-        }
+
     }
 
     private fun setDataToWidgets(recipe: Recipe) {

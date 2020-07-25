@@ -2,16 +2,19 @@ package com.anikinkirill.foodrecipes
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.anikinkirill.foodrecipes.adapters.OnRecipeListener
 import com.anikinkirill.foodrecipes.adapters.RecipeRecyclerAdapter
 import com.anikinkirill.foodrecipes.util.RecipeRecyclerItemDecoration
+import com.anikinkirill.foodrecipes.util.Testing
 import com.anikinkirill.foodrecipes.viewmodels.RecipeListViewModel
 
 class RecipeListActivity : BaseActivity(), OnRecipeListener {
@@ -32,7 +35,7 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
 
         initRecyclerView()
 
-        viewModel = ViewModelProvider(this).get(RecipeListViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(RecipeListViewModel::class.java)
         
         initSearchView()
 
@@ -40,6 +43,16 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
     }
 
     private fun subscribeObservers() {
+
+        viewModel.getRecipes().observe(this, Observer {
+            it?.let {
+                Log.d(TAG, "subscribeObservers: STATUS : ${it.status}")
+                it.data?.let { data ->
+                    Testing.printRecipes(data, TAG)
+                }
+            }
+        })
+
         viewModel.viewState().observe(this, Observer {
             when(it){
                 is ViewState.RECIPES -> {
@@ -72,13 +85,19 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
         val searchView: SearchView = findViewById(R.id.search_view)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-
+                query?.let {
+                    searchRecipes(query)
+                }
                 return true
             }
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
             }
         })
+    }
+
+    private fun searchRecipes(query: String) {
+        viewModel.searchRecipes(query, 1)
     }
 
     override fun onRecipeClick(position: Int) {
@@ -90,7 +109,7 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
     }
 
     override fun onCategoryClick(category: String) {
-
+        searchRecipes(category)
     }
 
     private fun displaySearchCategories(){
