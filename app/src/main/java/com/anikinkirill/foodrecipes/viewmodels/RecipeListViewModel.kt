@@ -16,7 +16,7 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     private val mViewState = MutableLiveData<ViewState>()
-    private val repository = RecipeRepository(application)
+    private val repository = RecipeRepository.getInstance(application)
     private val recipes = MediatorLiveData<Resource<List<Recipe>>>()
 
     // query extras

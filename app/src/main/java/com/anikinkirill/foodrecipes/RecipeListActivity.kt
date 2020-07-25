@@ -58,6 +58,7 @@ class RecipeListActivity : BaseActivity(), OnRecipeListener {
                         recipeAdapter.setRecipes(it.data as ArrayList<Recipe>)
                     }
                     is Resource.Status.LOADING -> {
+                        Log.d(TAG, "subscribeObservers: status: LOADING")
                         if(viewModel.getPageNumber()!! > 1) {
                             recipeAdapter.displayLoading()
                         }else{
